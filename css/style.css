@@ -1,0 +1,173 @@
+.text-center{
+    text-align: center;
+}
+.wrap{
+    width: 500px;
+    margin: auto;
+}
+
+.title{
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    margin: 50px 0 40px;
+    color: #7ec9c1;
+}
+.content01{
+    display: flex;
+}
+#text{
+    width:500px;
+    height:150px;
+    padding:10px;
+    margin:auto;
+}
+input {
+    margin-bottom:10px;
+  }
+.day01, .studyhour01, .text01 {
+    font-size: 1em;
+    padding: 15px 10px 10px;
+    font-family: 'Source Sans Pro',arial,sans-serif;
+    border: 1px solid #cecece;
+    background: #d7d7d7;
+    color:#FAFAFA;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  ::-webkit-input-placeholder {
+     color: #FAFAFA;
+  }
+  :-moz-placeholder {
+     color: #FAFAFA;  
+  }
+  ::-moz-placeholder {
+     color: #FAFAFA; 
+  }
+  :-ms-input-placeholder {  
+     color: #FAFAFA;  
+  }
+.today{
+    width: 200px;
+}
+.time{
+    width: 400px;
+    margin: 0 0 0 30px;
+}
+#studyhour{
+    width:150px;
+}
+.memo{
+    margin: 0 0 25px;
+}
+.btn,
+a.btn,
+button.btn {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #fff;
+  border-radius: 0.5rem;
+}
+.btn{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    appearance: none;
+    width: 200px;
+}
+
+.btn--yellow {
+    color: #000;
+    background-color: #7ec9c1;
+    border-bottom: 5px solid #29837a;
+  }
+  
+.btn--yellow:hover {
+    margin-top: 3px;
+    color: #fff;
+    background: #7ec9c1;
+    border-bottom: 2px solid #29837a;
+  }
+
+
+.content-list{
+    display: flex;
+    background-color: #7ec9c1;
+    padding:10px 0;
+    color: #fff;
+    margin: 50px 0 0;
+}
+
+.day02{
+    width: 20%;
+    text-align: center;
+    border-right: 1px solid #fff;
+}
+.studyhour02{
+    width: 20%;
+    text-align: center;
+    border-right: 1px solid #fff;
+}
+.text02{
+    width: 60%;
+    text-align: center;
+}
+.content-list2{
+    display: flex;
+    padding:５px 0;
+}
+.day03{
+    width: 20%;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #ccc; 
+    padding: 10px 0;
+}
+.studyhour03{
+    width: 20%;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #ccc; 
+}
+.text03{
+    width: 50%;
+    border: none;
+    border-bottom: 1px solid #ccc; 
+    
+}
+.delete{
+    width: 5%;
+    font-size: 8px;
+}
+.update{
+    width: 5%;
+    font-size: 8px;
+}
+.far{
+    color:#7ec9c1;
+    padding:10px 0 0;
+}

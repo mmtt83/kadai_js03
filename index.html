@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+<div class="wrap">
+    <h1 class="title">学習記録</h1>
+    <div class="content01">
+        <div class="today"><input type="date" id="day" class="day01"></div>
+        <div class="time">学習時間：<input type="time" id="studyhour" class="studyhour01"></div>
+    </div>
+    <div class="memo">
+        <textarea id="text" class="text01" placeholder="メモ"></textarea>
+    </div>
+    <div class="text-center"><button id="send" class="btn btn--yellow btn--cubic">記録</button></div>
+
+    <div class="content-list">
+        <div class="day02">日付</div>
+        <div class="studyhour02">学習時間</div>
+        <div class="text02">メモ</div>
+    </div>
+    <div id="output"></div>
+</div>
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Firebase -->
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    
+    //追加１
+    import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved } 
+    from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqDjfr8ohOf3LWT7oBXk-ciq8Botbf8GE",
+      authDomain: "js03-df6d9.firebaseapp.com",
+      projectId: "js03-df6d9",
+      storageBucket: "js03-df6d9.appspot.com",
+      messagingSenderId: "531028359585",
+      appId: "1:531028359585:web:f85e2484b9b8f6f485f3e0"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    //追加2 Realtime Databaseを使う２行を追加
+    const db = getDatabase(app); //RealtimeDatabaseを使うよ
+    const dbRef = ref(db, "study"); //RealtimeDatabase 自分で名前をつけた"study"を使うよ
+
+    //送信処理
+    $("#send").on("click" ,function(){
+        const day = $("#day").val();
+        const studyhour = $("#studyhour").val();
+        const text = $("#text").val();
+        // alert(day + text + studyhour); //取得確認
+
+        //データの塊を作成
+        const msg = {
+            day: $("#day").val(),
+            studyhour: $("#studyhour").val(),
+            text: $("#text").val(),           
+        }
+        //ユニークKEYを生成 ＝ 絶対にかぶらない番号みたいなもの
+        const newPostRef = push(dbRef); //Pushできる状況を作って ”study"データベースにデータを追加する準備
+        //"study"にユニークなKEYをつけてオブジェクトデータを登録
+        set(newPostRef,msg); //DBに値をセット。Realtime Database "study"にオブジェクトデータを追加。
+    });
+
+    //受信処理 onChildAddedを使い送信してくるデータを監視！
+    onChildAdded(dbRef, function(data){
+        //受信したデータを変数に代入
+        const msg = data.val(); //オブジェクトデータを取得し、変数msgに代入
+        const key = data.key; //データのユニークキー(削除や更新に使用可能)
+        console.log(key, '鍵');
+
+        //表示用テキスト HTMLを作成  ※「更新」はinputタグでしかできない
+        let h =`
+            <div class="message content-list2" data-key=${key}> 
+                <input type="text" value=${msg.day} class="day03"/>
+                <input type="text" value=${msg.studyhour} class="studyhour03"/>
+                <input type="text" value=${msg.text} class="text03" />
+                <p class="update"><i class="far fa-edit fa-2x"></i></p>
+                <p class="delete"><i class="far fa-trash-alt fa-2x"></i></p>
+            </div>`;
+            //この一つの塊が「鍵」を表している
+        
+        $("#output").append(h); //#outputの最後に追加
+    });
+
+    //削除処理
+
+    //削除ボタンを押したらアラートが表示される
+    //javascriptやjQueryで作られたHTMLをクリックしても反応しない。DOMで作ったHTML
+    // $(".delete").on("click", function(){
+    //     alert(11);
+    // })
+    
+    //★DOMで作ったHTMLを削除したい場合以下のように書く
+    $(document).on("click", ".delete", function(){
+       // alert("削除押された");
+    
+       //クリックされたkeyの塊を取得する
+       var v = $(this).parent().data().key;
+       //parentで一つ上の親要素を選択し、データ属性は.data()で選択。更にその中身を取るために.keyを追加。
+       console.log(v, 'vvv');
+
+        console.log(ref(db, 'study/' + v), 'vvv');
+       //vは鍵 ref＝参照する、dbのsutudyの中のKEYを
+       remove(ref(db, 'study/' + v));
+
+       //コード上
+       //set(newPostRef, msg);
+       //書き方をなんとなく覚える。
+
+    //HTMLを消す方法。これがないとデータだけ削除されHTMLには表示が残ってしまう
+       $(this).parent().remove();
+
+    });
+
+    //更新処理
+
+    $(document).on("click", ".update", function(){
+    
+       //クリックされたkeyの塊を取得する
+
+       //KEYは絶対にいるので以下の文は必ず必要
+       var v = $(this).parent().data().key;
+
+       var dayValue = $(this).siblings(".day03").val();
+       var studyhourValue = $(this).siblings(".studyhour03").val();
+       var textValue = $(this).siblings(".text03").val();
+       console.log(dayValue, '同じ列');
+       console.log(studyhourValue, '同じ列');
+       console.log(textValue, '同じ列');
+
+       //更新処理
+       set(ref(db, 'study/' + v), {
+           day: dayValue,
+           studyhour: studyhourValue,
+           text:textValue,
+       });
+
+    });
+
+  </script>
+
+    
+</body>
+</html>
